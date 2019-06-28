@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+
+  trinitest:
+    container_name: 'trinitest'
+    restart: always
+    image: server:latest
+    environment:
+      PORT: 9000
+      SECRET: 'supersecret'
+    volumes:
+      - ./server:/opt/app
+    ports:
+      - "9000:9000"
+    build:
+      dockerfile: Dockerfile
+      context: server/.
+    networks:
+      - default
+    deploy:
+      replicas: 1
