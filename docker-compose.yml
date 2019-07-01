@@ -1,6 +1,21 @@
 version: '3.3'
 services:
 
+  # База контейнезирована только в рамках тестового, на проде этого делать нельзя
+  trinimongo:
+    container_name: 'trinimongo'
+    image: mongo:latest
+    command: mongod --port 27017
+    volumes:
+      - ./data:/data/db
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    ports:
+      - "27017:27017"
+    networks:
+      - default
+
   trinitest:
     container_name: 'trinitest'
     restart: always
@@ -8,6 +23,7 @@ services:
     environment:
       PORT: 9000
       SECRET: 'supersecret'
+      MONGO_URL: mongodb://trinimongo:27017/users
     volumes:
       - ./server:/opt/app
     ports:
@@ -19,3 +35,7 @@ services:
       - default
     deploy:
       replicas: 1
+    depends_on:
+      - trinimongo
+    links:
+      - trinimongo
