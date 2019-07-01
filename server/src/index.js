@@ -84,7 +84,7 @@ register('/me', async (req, res) => {
             </div>
         `;
 
-		renderHtml(res, null, renderHtml);
+		renderHtml(res, null, htmlForRender);
 	}
 });
 
